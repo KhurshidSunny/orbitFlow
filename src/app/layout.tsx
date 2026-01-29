@@ -17,7 +17,11 @@ export const metadata: Metadata = {
   description:
     "Multi-role project management dashboard with Kanban, activity logs, and RBAC.",
   icons: {
-    icon: "/favicon.svg",
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+    shortcut: "/favicon.svg",
+    apple: "/favicon.svg",
   },
 };
 

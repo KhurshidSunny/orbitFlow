@@ -28,7 +28,7 @@ export default async function ActivityPage() {
     title: log.type
       .replace(/_/g, " ")
       .toLowerCase()
-      .replace(/^\w/, (c) => c.toUpperCase()),
+      .replace(/^\w/, (c: string) => c.toUpperCase()),
     detail: `${projectMap.get(log.projectId.toString()) ?? "Project"} · ${
       log.metadata?.title ?? "Update recorded"
     }`,

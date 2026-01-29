@@ -115,7 +115,7 @@ export default async function Home() {
     title: log.type
       .replace(/_/g, " ")
       .toLowerCase()
-      .replace(/^\w/, (c) => c.toUpperCase()),
+      .replace(/^\w/, (c: string) => c.toUpperCase()),
     time: new Date(log.createdAt).toLocaleDateString("en-US", {
       month: "short",
       day: "2-digit",
