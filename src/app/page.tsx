@@ -1,4 +1,5 @@
 import AppShell from "@/components/layout/AppShell";
+import OverviewCharts from "@/components/dashboard/OverviewCharts";
 import { currentUser } from "@/lib/mock-user";
 
 const stats = [
@@ -6,29 +7,33 @@ const stats = [
     label: "Active Projects",
     value: "12",
     trend: "+2 this week",
-    color: "from-sky-500/15 via-white to-white dark:from-sky-500/20",
-    accent: "bg-sky-500",
+    color:
+      "from-sky-500 to-sky-400 text-white dark:from-sky-500 dark:to-sky-400",
+    accent: "bg-white/80",
   },
   {
     label: "Open Tasks",
     value: "58",
     trend: "12 overdue",
-    color: "from-amber-400/20 via-white to-white dark:from-amber-500/20",
-    accent: "bg-amber-500",
+    color:
+      "from-amber-400 to-yellow-300 text-slate-900 dark:from-amber-400 dark:to-yellow-300",
+    accent: "bg-white/80",
   },
   {
     label: "Team Members",
     value: "24",
     trend: "3 new invites",
-    color: "from-emerald-400/20 via-white to-white dark:from-emerald-500/20",
-    accent: "bg-emerald-500",
+    color:
+      "from-emerald-500 to-emerald-400 text-white dark:from-emerald-500 dark:to-emerald-400",
+    accent: "bg-white/80",
   },
   {
     label: "Velocity",
     value: "76%",
     trend: "On track",
-    color: "from-violet-400/20 via-white to-white dark:from-violet-500/20",
-    accent: "bg-violet-500",
+    color:
+      "from-violet-500 to-fuchsia-400 text-white dark:from-violet-500 dark:to-fuchsia-400",
+    accent: "bg-white/80",
   },
 ];
 
@@ -92,18 +97,14 @@ export default function Home() {
         {stats.map((stat) => (
           <div
             key={stat.label}
-            className={`rounded-2xl border border-slate-200 bg-gradient-to-br ${stat.color} p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900`}
+            className={`rounded-2xl bg-gradient-to-br ${stat.color} p-5 shadow-md`}
           >
             <div className="flex items-center justify-between">
-              <p className="text-sm text-slate-500 dark:text-slate-400">
-                {stat.label}
-              </p>
+              <p className="text-sm font-medium">{stat.label}</p>
               <span className={`h-2 w-2 rounded-full ${stat.accent}`} />
             </div>
             <p className="mt-3 text-2xl font-semibold">{stat.value}</p>
-            <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
-              {stat.trend}
-            </p>
+            <p className="mt-2 text-xs/5 opacity-90">{stat.trend}</p>
           </div>
         ))}
       </section>
@@ -139,12 +140,12 @@ export default function Home() {
                     </td>
                     <td className="px-4 py-3">{project.due}</td>
                     <td className="px-4 py-3">
-                      <span className="rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold text-sky-700 dark:bg-sky-500/20 dark:text-sky-200">
+                      <span className="whitespace-nowrap rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold text-sky-700 dark:bg-sky-500/20 dark:text-sky-200">
                         {project.status}
                       </span>
                     </td>
                     <td className="px-4 py-3">
-                      <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700 dark:bg-amber-500/20 dark:text-amber-200">
+                      <span className="whitespace-nowrap rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700 dark:bg-amber-500/20 dark:text-amber-200">
                         {project.priority}
                       </span>
                     </td>
@@ -227,6 +228,10 @@ export default function Home() {
             see their assigned tasks.
           </p>
         </div>
+      </section>
+
+      <section className="mt-8">
+        <OverviewCharts />
       </section>
 
       {currentUser.role === "manager" ? (
