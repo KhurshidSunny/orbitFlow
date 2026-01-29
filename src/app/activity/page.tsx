@@ -1,36 +1,51 @@
 import AppShell from "@/components/layout/AppShell";
-import { currentUser } from "@/lib/mock-user";
+import { connectToDatabase } from "@/lib/db";
+import ActivityLog from "@/server/models/ActivityLog";
+import Project from "@/server/models/Project";
+import { getSessionUser } from "@/lib/auth";
 
-const activity = [
-  {
-    title: "Task moved to Review",
-    detail: "OrbitFlow Mobile · UI polish checklist",
-    time: "10 minutes ago",
-  },
-  {
-    title: "New member added",
-    detail: "Samantha joined Client Onboarding",
-    time: "2 hours ago",
-  },
-  {
-    title: "Project archived",
-    detail: "Legacy CRM Integration",
-    time: "Yesterday",
-  },
-  {
-    title: "Task assigned",
-    detail: "Alicia assigned to Release Notes",
-    time: "2 days ago",
-  },
-];
+export const dynamic = "force-dynamic";
 
-export default function ActivityPage() {
+export default async function ActivityPage() {
+  await connectToDatabase();
+  const sessionUser = await getSessionUser();
+  const [activityLogs, projects] = await Promise.all([
+    ActivityLog.find({}).sort({ createdAt: -1 }).limit(8).lean(),
+    Project.find({}).lean(),
+  ]);
+
+  const projectMap = new Map(
+    projects.map((project) => [project._id.toString(), project.name])
+  );
+
+  const projectCount = projects.length;
+
+  const viewer = sessionUser
+    ? { name: sessionUser.name, role: sessionUser.role, title: "User" }
+    : { name: "Guest", role: "member", title: "Guest" };
+
+  const activity = activityLogs.map((log) => ({
+    title: log.type
+      .replace(/_/g, " ")
+      .toLowerCase()
+      .replace(/^\w/, (c) => c.toUpperCase()),
+    detail: `${projectMap.get(log.projectId.toString()) ?? "Project"} · ${
+      log.metadata?.title ?? "Update recorded"
+    }`,
+    time: new Date(log.createdAt).toLocaleDateString("en-US", {
+      month: "short",
+      day: "2-digit",
+    }),
+  }));
+
   return (
     <AppShell
       active="activity"
       title="Activity Log"
       subtitle="Recent updates across your workspace."
-      user={currentUser}
+      user={viewer}
+      projectCount={projectCount}
+      isAuthenticated={Boolean(sessionUser)}
     >
       <div className="mt-8 space-y-4">
         {activity.map((item) => (

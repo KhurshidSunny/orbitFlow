@@ -12,24 +12,18 @@ import {
   YAxis,
 } from "recharts";
 
-const velocityData = [
-  { name: "Mon", value: 18 },
-  { name: "Tue", value: 24 },
-  { name: "Wed", value: 21 },
-  { name: "Thu", value: 28 },
-  { name: "Fri", value: 32 },
-  { name: "Sat", value: 26 },
-  { name: "Sun", value: 30 },
-];
+type VelocityPoint = { name: string; value: number };
+type WorkloadPoint = { name: string; planned: number; completed: number };
 
-const workloadData = [
-  { name: "Week 1", planned: 40, completed: 28 },
-  { name: "Week 2", planned: 46, completed: 34 },
-  { name: "Week 3", planned: 52, completed: 41 },
-  { name: "Week 4", planned: 60, completed: 48 },
-];
+type OverviewChartsProps = {
+  velocityData: VelocityPoint[];
+  workloadData: WorkloadPoint[];
+};
 
-export default function OverviewCharts() {
+export default function OverviewCharts({
+  velocityData,
+  workloadData,
+}: OverviewChartsProps) {
   return (
     <div className="grid gap-6 lg:grid-cols-2">
       <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">

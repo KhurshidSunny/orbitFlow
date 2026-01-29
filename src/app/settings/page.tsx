@@ -1,5 +1,7 @@
 import AppShell from "@/components/layout/AppShell";
-import { currentUser } from "@/lib/mock-user";
+import { connectToDatabase } from "@/lib/db";
+import Project from "@/server/models/Project";
+import { getSessionUser } from "@/lib/auth";
 
 const settings = [
   {
@@ -16,13 +18,24 @@ const settings = [
   },
 ];
 
-export default function SettingsPage() {
+export const dynamic = "force-dynamic";
+
+export default async function SettingsPage() {
+  await connectToDatabase();
+  const sessionUser = await getSessionUser();
+  const projectCount = await Project.countDocuments({ isArchived: false });
+  const viewer = sessionUser
+    ? { name: sessionUser.name, role: sessionUser.role, title: "User" }
+    : { name: "Guest", role: "member", title: "Guest" };
+
   return (
     <AppShell
       active="settings"
       title="Settings"
       subtitle="Control profile, security, and notification preferences."
-      user={currentUser}
+      user={viewer}
+      projectCount={projectCount}
+      isAuthenticated={Boolean(sessionUser)}
     >
       <div className="mt-8 grid gap-6 lg:grid-cols-3">
         {settings.map((item) => (

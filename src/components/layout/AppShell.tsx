@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import ThemeToggle from "@/components/ThemeToggle";
-import { currentUser as defaultUser } from "@/lib/mock-user";
 
 type AppShellProps = {
   active: "dashboard" | "projects" | "kanban" | "activity" | "teams" | "settings";
@@ -16,6 +15,8 @@ type AppShellProps = {
     role: string;
     title: string;
   };
+  projectCount?: number;
+  isAuthenticated?: boolean;
 };
 
 const navItems = [
@@ -33,8 +34,10 @@ export default function AppShell({
   subtitle,
   children,
   user,
+  projectCount,
+  isAuthenticated,
 }: AppShellProps) {
-  const currentUser = user ?? defaultUser;
+  const currentUser = user ?? { name: "Guest", role: "member", title: "Guest" };
   const [mobileOpen, setMobileOpen] = useState(false);
   return (
     <div className="min-h-screen overflow-x-hidden bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
@@ -79,11 +82,11 @@ export default function AppShell({
                 }`}
               >
                 <span>{item.label}</span>
-                {item.key === "projects" && (
+                  {item.key === "projects" && typeof projectCount === "number" ? (
                   <span className="rounded-full bg-slate-200 px-2 py-0.5 text-xs text-slate-600 dark:bg-slate-800 dark:text-slate-300">
-                    12
+                      {projectCount}
                   </span>
-                )}
+                  ) : null}
               </Link>
             ))}
           </nav>
@@ -141,6 +144,25 @@ export default function AppShell({
                   {currentUser.role}
                 </span>
               </div>
+              {isAuthenticated ? (
+                <button
+                  type="button"
+                  onClick={async () => {
+                    await fetch("/api/auth/logout", { method: "POST" });
+                    window.location.href = "/auth/login";
+                  }}
+                  className="rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-600 shadow-sm transition hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
+                >
+                  Log out
+                </button>
+              ) : (
+                <Link
+                  href="/auth/login"
+                  className="rounded-full bg-sky-500 px-4 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-sky-600"
+                >
+                  Log in
+                </Link>
+              )}
               <ThemeToggle />
             </div>
           </header>
@@ -206,6 +228,11 @@ export default function AppShell({
                   }`}
                 >
                   {item.label}
+                  {item.key === "projects" && typeof projectCount === "number" ? (
+                    <span className="rounded-full bg-slate-200 px-2 py-0.5 text-xs text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+                      {projectCount}
+                    </span>
+                  ) : null}
                 </Link>
               ))}
             </div>
