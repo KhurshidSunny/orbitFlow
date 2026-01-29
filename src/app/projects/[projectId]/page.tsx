@@ -6,13 +6,14 @@ import User from "@/server/models/User";
 import { getSessionUser } from "@/lib/auth";
 import mongoose from "mongoose";
 
-type Params = { params: { projectId: string } };
+type Params = { params: Promise<{ projectId: string }> };
 
 export const dynamic = "force-dynamic";
 
 export default async function ProjectDetailPage({ params }: Params) {
   await connectToDatabase();
-  const projectId = decodeURIComponent(params.projectId);
+  const { projectId: rawProjectId } = await params;
+  const projectId = decodeURIComponent(rawProjectId);
   if (!projectId || !mongoose.Types.ObjectId.isValid(projectId)) {
     return (
       <AppShell

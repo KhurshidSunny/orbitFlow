@@ -3,12 +3,13 @@ import { connectToDatabase } from "@/lib/db";
 import Column from "@/server/models/Column";
 
 type Params = {
-  params: { projectId: string };
+  params: Promise<{ projectId: string }>;
 };
 
 export async function GET(_: Request, { params }: Params) {
   await connectToDatabase();
-  const columns = await Column.find({ projectId: params.projectId })
+  const { projectId } = await params;
+  const columns = await Column.find({ projectId })
     .sort({ order: 1 })
     .lean();
   return NextResponse.json(columns);
