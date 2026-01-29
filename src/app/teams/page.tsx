@@ -58,7 +58,7 @@ export default async function TeamsPage() {
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-200 text-sm font-semibold text-slate-700 dark:bg-slate-800 dark:text-slate-200">
                 {member.name
                   .split(" ")
-                  .map((part) => part[0])
+                  .map((part: string) => part[0])
                   .join("")}
               </div>
               <div>
