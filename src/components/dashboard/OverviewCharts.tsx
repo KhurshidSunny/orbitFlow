@@ -39,7 +39,7 @@ export default function OverviewCharts() {
             Tasks closed
           </span>
         </div>
-        <div className="mt-4 h-60">
+        <div className="mt-4 h-56 sm:h-60">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={velocityData}>
               <defs>
@@ -71,7 +71,7 @@ export default function OverviewCharts() {
             Sprint throughput
           </span>
         </div>
-        <div className="mt-4 h-60">
+        <div className="mt-4 h-56 sm:h-60">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={workloadData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />

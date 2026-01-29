@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import ThemeToggle from "@/components/ThemeToggle";
 import { currentUser as defaultUser } from "@/lib/mock-user";
 
@@ -32,8 +35,9 @@ export default function AppShell({
   user,
 }: AppShellProps) {
   const currentUser = user ?? defaultUser;
+  const [mobileOpen, setMobileOpen] = useState(false);
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+    <div className="min-h-screen overflow-x-hidden bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
       <div className="flex min-h-screen">
         <aside className="hidden w-72 flex-col border-r border-slate-200 bg-white px-6 py-8 dark:border-slate-800 dark:bg-slate-900 lg:flex">
           <div className="flex items-center gap-3">
@@ -94,7 +98,7 @@ export default function AppShell({
           </div>
         </aside>
 
-        <main className="flex-1 px-6 py-8 lg:px-10">
+        <main className="flex-1 px-4 py-6 sm:px-6 lg:px-10">
           <header className="flex flex-wrap items-center justify-between gap-6">
             <div>
               <p className="text-sm text-slate-500 dark:text-slate-400">
@@ -108,6 +112,28 @@ export default function AppShell({
               ) : null}
             </div>
             <div className="flex flex-wrap items-center gap-3">
+              <button
+                type="button"
+                className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-600 shadow-sm transition hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800 lg:hidden"
+                onClick={() => setMobileOpen(true)}
+                aria-label="Open menu"
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <line x1="3" y1="6" x2="21" y2="6" />
+                  <line x1="3" y1="12" x2="21" y2="12" />
+                  <line x1="3" y1="18" x2="21" y2="18" />
+                </svg>
+                Menu
+              </button>
               <div className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm text-slate-600 shadow-sm dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300">
                 <span className="h-2 w-2 rounded-full bg-emerald-500" />
                 Role:{" "}
@@ -121,6 +147,71 @@ export default function AppShell({
           {children}
         </main>
       </div>
+
+      {mobileOpen ? (
+        <div className="fixed inset-0 z-40 lg:hidden">
+          <div
+            className="absolute inset-0 bg-slate-900/40"
+            onClick={() => setMobileOpen(false)}
+          />
+          <div className="absolute left-0 top-0 h-full w-72 bg-white px-6 py-8 shadow-xl dark:bg-slate-900">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Image
+                  className="block dark:hidden"
+                  src="/logo-light.svg"
+                  alt="OrbitFlow logo"
+                  width={120}
+                  height={32}
+                />
+                <Image
+                  className="hidden dark:block"
+                  src="/logo-dark.svg"
+                  alt="OrbitFlow logo"
+                  width={120}
+                  height={32}
+                />
+              </div>
+              <button
+                type="button"
+                className="rounded-full border border-slate-200 p-2 text-slate-600 dark:border-slate-800 dark:text-slate-200"
+                onClick={() => setMobileOpen(false)}
+                aria-label="Close menu"
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+            </div>
+            <div className="mt-8 space-y-2 text-sm font-medium">
+              {navItems.map((item) => (
+                <Link
+                  key={item.key}
+                  href={item.href}
+                  onClick={() => setMobileOpen(false)}
+                  className={`flex items-center justify-between rounded-xl px-4 py-3 transition ${
+                    active === item.key
+                      ? "bg-sky-100 text-sky-700 dark:bg-sky-500/20 dark:text-sky-200"
+                      : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

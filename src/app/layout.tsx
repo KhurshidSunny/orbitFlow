@@ -16,6 +16,9 @@ export const metadata: Metadata = {
   title: "OrbitFlow PM",
   description:
     "Multi-role project management dashboard with Kanban, activity logs, and RBAC.",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({

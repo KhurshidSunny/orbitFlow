@@ -1,6 +1,6 @@
 export const currentUser = {
-  name: "Shariar Hossain",
+  name: "Jalil Rehman",
   role: "manager",
-  title: "UI/UX Designer",
+  title: "Manager",
 } as const;
 

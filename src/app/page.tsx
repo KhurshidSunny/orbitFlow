@@ -89,11 +89,11 @@ export default function Home() {
   return (
     <AppShell
       active="dashboard"
-      title="Welcome back, Shariar"
+      title="Welcome back, Jalil"
       subtitle="Here’s the latest activity across your managed projects."
       user={currentUser}
     >
-      <section className="mt-8 grid gap-6 lg:grid-cols-4">
+      <section className="mt-8 grid gap-4 sm:gap-6 sm:grid-cols-2 xl:grid-cols-4">
         {stats.map((stat) => (
           <div
             key={stat.label}
@@ -117,7 +117,7 @@ export default function Home() {
               View all
             </button>
           </div>
-          <div className="mt-4 overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800">
+          <div className="mt-4 hidden overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800 sm:block">
             <table className="w-full text-sm">
               <thead className="bg-slate-100 text-left text-xs uppercase tracking-wide text-slate-500 dark:bg-slate-800/60 dark:text-slate-400">
                 <tr>
@@ -153,6 +153,30 @@ export default function Home() {
                 ))}
               </tbody>
             </table>
+          </div>
+          <div className="mt-4 grid gap-3 sm:hidden">
+            {projects.map((project) => (
+              <div
+                key={project.name}
+                className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900"
+              >
+                <div className="flex items-center justify-between">
+                  <p className="font-medium">{project.name}</p>
+                  <span className="whitespace-nowrap rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold text-sky-700 dark:bg-sky-500/20 dark:text-sky-200">
+                    {project.status}
+                  </span>
+                </div>
+                <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+                  Owner: {project.owner}
+                </p>
+                <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                  Due: {project.due}
+                </p>
+                <span className="mt-3 inline-flex whitespace-nowrap rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700 dark:bg-amber-500/20 dark:text-amber-200">
+                  {project.priority}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
 
