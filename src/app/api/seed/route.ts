@@ -94,10 +94,12 @@ async function seedDatabase() {
   ]);
 
   const mobileColumns = columns.filter(
-    (col) => col.projectId.toString() === mobileProject._id.toString()
+    (col: { projectId: { toString: () => string }; _id: { toString: () => string } }) => 
+      col.projectId.toString() === mobileProject._id.toString()
   );
   const onboardingColumns = columns.filter(
-    (col) => col.projectId.toString() === onboardingProject._id.toString()
+    (col: { projectId: { toString: () => string }; _id: { toString: () => string } }) => 
+      col.projectId.toString() === onboardingProject._id.toString()
   );
 
   const tasks = await Task.create([
